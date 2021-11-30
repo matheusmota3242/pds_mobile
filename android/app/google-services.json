@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "405255121887",
+    "project_id": "projeto-detalhado-software",
+    "storage_bucket": "projeto-detalhado-software.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405255121887:android:d4804b7b17d2306783326a",
+        "android_client_info": {
+          "package_name": "com.pds.agendador"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405255121887-ie3pqg8d5ju0uggalhs8b9pn0brunmno.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pds.agendador",
+            "certificate_hash": "c42865203785cb968850b8d4f385e74378f2e768"
+          }
+        },
+        {
+          "client_id": "405255121887-evg4pft8j3msgcp5s0bk3f5c82uq8tui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOL4JJ_jvwXc47MFwfES5M-DGHYTSXHBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405255121887-evg4pft8j3msgcp5s0bk3f5c82uq8tui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
