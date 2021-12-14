@@ -6,6 +6,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:pds_mobile/views/home_view.dart';
 
+import 'views/parametro_ativo_list_view.dart';
+
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 late AndroidNotificationChannel channel;
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomeView(),
+      home: const ParametroAtivoListView(),
     );
   }
 }

@@ -1,25 +1,37 @@
 import 'dart:convert';
 
-import 'package:pds_mobile/models/parametro_acao.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pds_mobile/models/parametro_ativo.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:pds_mobile/services/firebase_notificacao_service.dart';
 
 class ApiService {
-  static const apiUrl = "192.168.15.188:8080";
+  static const apiUrl = "10.0.2.2:8080";
+  //static const apiUrl = "192.168.15.188:8080";
 
   final int _httpStatusOK = 200;
 
-  void salvarParametroAcao(ParametroAcao parametroAcao) async {
-    String path = "/parametro-acao/salvar";
-    parametroAcao.token = await FirebaseNotificacaoService().getToken();
+  Future salvarParametroAcao(ParametroAtivo parametroAtivo) async {
+    String path = "/parametro-ativo/salvar";
+    parametroAtivo.token = await FirebaseNotificacaoService().getToken();
     http.Response response = await http.post(Uri.http(apiUrl, path),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(parametroAcao));
-
+        body: jsonEncode(parametroAtivo));
     if (response.statusCode == _httpStatusOK) {
-      print('OK');
+      return Fluttertoast.showToast(
+          msg: "Enviado com sucesso", gravity: ToastGravity.CENTER);
     } else {
-      print(response.body.toString());
+      return Fluttertoast.showToast(
+          msg: "Ocorreu um erro", gravity: ToastGravity.CENTER);
     }
+  }
+
+  Future receberTodos() async {
+    String path = "/parametro-ativo/recuperar";
+    http.Response response = await http.get(Uri.http(apiUrl, path));
+    var body = json.decode(response.body);
+
+    return body;
   }
 }

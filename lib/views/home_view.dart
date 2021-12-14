@@ -2,9 +2,12 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:pds_mobile/models/parametro_acao.dart';
+import 'package:pds_mobile/models/parametro_ativo.dart';
 import 'package:pds_mobile/services/api_service.dart';
 import 'package:pds_mobile/services/firebase_notificacao_service.dart';
+
+import 'parametro_ativo_list_view.dart';
+import 'widgets/menu_drawer.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -14,7 +17,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final ApiService _apiService = ApiService();
   final GlobalKey _formKey = GlobalKey<FormState>();
-  final ParametroAcao _parametroAcao = ParametroAcao();
+  final ParametroAtivo _parametroAtivo = ParametroAtivo();
+  static const String _tipoAtivoAcao = "ACAO";
   Random random = Random();
   @override
   void initState() {
@@ -32,7 +36,10 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Novo parâmetro ação'),
+      ),
+      drawer: const MenuDrawer(),
       body: Center(
         child: Form(
           key: _formKey,
@@ -41,7 +48,7 @@ class _HomeViewState extends State<HomeView> {
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
                 initialValue: 'Tíquete',
-                onChanged: (value) => _parametroAcao.tiquete = value,
+                onChanged: (value) => _parametroAtivo.simbolo = value,
               ),
             ),
             Padding(
@@ -49,20 +56,26 @@ class _HomeViewState extends State<HomeView> {
               child: TextFormField(
                 initialValue: '0.00',
                 onChanged: (value) {
-                  _parametroAcao.valor = double.parse(value);
+                  _parametroAtivo.valor = double.parse(value);
                 },
               ),
             ),
             Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: IconButton(
-                  splashColor: Colors.black,
-                  color: Colors.black,
-                  onPressed: () {
-                    _apiService.salvarParametroAcao(_parametroAcao);
-                  },
-                  icon: const Icon(Icons.send),
-                ))
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                splashColor: Colors.black,
+                color: Colors.black,
+                onPressed: () async {
+                  _parametroAtivo.tipoAtivo = _tipoAtivoAcao;
+                  await _apiService.salvarParametroAcao(_parametroAtivo);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => ParametroAtivoListView()));
+                },
+                icon: const Icon(Icons.send),
+              ),
+            )
           ]),
         ),
       ),
