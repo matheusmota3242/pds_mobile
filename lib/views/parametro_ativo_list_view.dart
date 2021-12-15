@@ -33,7 +33,9 @@ class _ParametroAtivoListViewState extends State<ParametroAtivoListView> {
             var data = snapshot.data;
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
-                return Text('waiting...');
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
                 break;
               case ConnectionState.active:
                 return ListView.builder(
@@ -42,18 +44,56 @@ class _ParametroAtivoListViewState extends State<ParametroAtivoListView> {
                       return const Text('ok');
                     });
                 break;
+              case ConnectionState.none:
+                return const Center(
+                  child: Text('Não há conexão.'),
+                );
               case ConnectionState.done:
-                if (snapshot.hasData) {
-                  return ListView.builder(
+                Widget body = Container();
+                if (snapshot.hasData && data.length > 0) {
+                  body = ListView.separated(
+                      separatorBuilder: (context, index) => Container(
+                            height: 1,
+                            width: double.maxFinite,
+                            color: Colors.black,
+                          ),
                       itemCount: data.length,
                       itemBuilder: (context, index) {
                         ParametroAtivo parametroAtivo =
                             ParametroAtivo.fromJson(data[index]);
-                        return Text(parametroAtivo.simbolo);
+                        return Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(parametroAtivo.simbolo),
+                                  Text('Parâmetro: ' +
+                                      parametroAtivo.valor.toString()),
+                                ],
+                              ),
+                              IconButton(
+                                  onPressed: () async {
+                                    await _apiService
+                                        .remover(parametroAtivo.id);
+                                    setState(() {});
+                                  },
+                                  icon: const Icon(Icons.delete)),
+                            ],
+                          ),
+                        );
                       });
+                } else if (!snapshot.hasData) {
+                  body = const Center(
+                    child: Text('Não há conexão'),
+                  );
+                } else if (data.length == 0) {
+                  body = const Center(
+                      child: Text('Não há parâmetros cadastrados'));
                 }
-                return Text('Vazio');
-
+                return body;
                 break;
               default:
                 return Text('default');
